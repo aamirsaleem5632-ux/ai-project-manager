@@ -22,15 +22,23 @@
       if (saved) {
         const parsed = JSON.parse(saved);
 
-        if (Array.isArray(parsed)) {
-          tasks = parsed.filter((task) => {
-            return task &&
+        if (!Array.isArray(parsed)) {
+          throw new Error("Saved tasks must be an array; storage is protected.");
+        }
+
+        const validTasks = parsed.every((task) => {
+          return task &&
               typeof task.id === "string" &&
               typeof task.title === "string" &&
               VALID_STATUSES.includes(task.status) &&
               VALID_PRIORITIES.includes(task.priority);
-          });
+        });
+
+        if (!validTasks) {
+          throw new Error("Saved tasks contain invalid entries; storage is protected.");
         }
+
+        tasks = parsed;
       }
     } catch (error) {
       loaded = false;

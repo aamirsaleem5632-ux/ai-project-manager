@@ -281,4 +281,46 @@ test("Does not overwrite storage after a failed initial read", () => {
   assert.deepEqual(errors.map(({ operation }) => operation), ["load", "save"]);
 });
 
+test("Does not overwrite valid JSON with an unexpected top-level type", () => {
+  const storage = createMemoryStorage();
+  const originalValue = JSON.stringify({ task: "preserve this data" });
+  storage.setItem("tasks", originalValue);
+  const errors = [];
+  const store = createTaskStore(storage, "tasks", (error, operation) => {
+    errors.push({ error, operation });
+  });
+
+  assert.deepEqual(store.getTasks(), []);
+  assert.equal(store.create({
+    title: "Do not replace saved data",
+    status: "todo",
+    priority: "medium"
+  }), false);
+  assert.equal(storage.getItem("tasks"), originalValue);
+  assert.deepEqual(errors.map(({ operation }) => operation), ["load", "save"]);
+});
+
+test("Does not discard invalid entries from a saved task array", () => {
+  const storage = createMemoryStorage();
+  const originalValue = JSON.stringify([
+    { id: "valid", title: "Keep me", status: "todo", priority: "low" },
+    { id: "invalid", title: "Bad status", status: "waiting", priority: "low" }
+  ]);
+  storage.setItem("tasks", originalValue);
+  const errors = [];
+  const store = createTaskStore(storage, "tasks", (error, operation) => {
+    errors.push({ error, operation });
+  });
+
+  assert.deepEqual(store.getTasks(), []);
+  assert.equal(store.delete("valid"), false);
+  assert.equal(store.create({
+    title: "Do not discard invalid entry",
+    status: "todo",
+    priority: "medium"
+  }), false);
+  assert.equal(storage.getItem("tasks"), originalValue);
+  assert.deepEqual(errors.map(({ operation }) => operation), ["load", "save"]);
+});
+
 console.log(`\n${passed} tests passed.`);
