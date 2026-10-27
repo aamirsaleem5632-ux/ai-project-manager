@@ -69,7 +69,7 @@ The test suite contains 23 tests covering:
 **Current local test result:** 23 tests passed.
 
 The task-store tests exercise the production CRUD and persistence module with an in-memory localStorage substitute. They do not simulate browser DOM events or replace full browser end-to-end testing.
-Browser-level UI testing was not performed.
+Manual browser testing completed successfully: task creation, editing, deletion, search, status filtering, and persistence after page refresh all worked. Automated browser end-to-end tests were not run.
 
 ## Integrations and Limitations
 During development, the connected Atlassian Rovo MCP tools were used to read Jira issues, and the GitHub MCP tools were used to inspect repository commit details. The task-store data-loss fix is recorded in commit `f66ef9c`. These were read-only development-time tool interactions; the web application itself does not connect to Jira, GitHub, or MCP services.
