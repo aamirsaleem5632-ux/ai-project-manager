@@ -28,7 +28,7 @@ After completing the work, report:
 - The issue or requirement addressed.
 - Files changed.
 - Fixes implemented.
-- Tests executed and their results.
+- Tests executed and their results.nod
 - Any remaining limitations.
 
 ## Safety Rules
