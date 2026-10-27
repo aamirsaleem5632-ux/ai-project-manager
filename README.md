@@ -64,14 +64,17 @@ The test suite contains 21 tests covering:
 - Creating, editing, deleting, and clearing tasks through the same task store used by the app
 - Restoring persisted tasks after creating a new store instance
 - Preserving in-memory data when a localStorage write fails
-- Preventing writes after saved tasks fail to load
+- Preventing writes when saved tasks fail to load or contain invalid data
 
-**Current test result:** Run `node tests.js` to see the current result.
+**Current local test result:** 23 tests passed.
 
 The task-store tests exercise the production CRUD and persistence module with an in-memory localStorage substitute. They do not simulate browser DOM events or replace full browser end-to-end testing.
+Browser-level UI testing was not performed.
 
 ## Integrations and Limitations
-The current version is a local web application. Jira, GitHub automation, and MCP server integration are not yet configured. These integrations must be set up and verified before they can be demonstrated as working features.
+During development, the connected Atlassian Rovo MCP tools were used to read Jira issues, and the GitHub MCP tools were used to inspect repository commit details. The task-store data-loss fix is recorded in commit `f66ef9c`. These were read-only development-time tool interactions; the web application itself does not connect to Jira, GitHub, or MCP services.
+
+No MCP setup instructions are documented here because the project's MCP configuration could not be verified from the available project files.
 
 The current application stores tasks in one browser and does not use a shared database or user authentication.
 
