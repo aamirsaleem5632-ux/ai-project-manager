@@ -74,7 +74,7 @@ Browser-level UI testing was not performed.
 ## Integrations and Limitations
 During development, the connected Atlassian Rovo MCP tools were used to read Jira issues, and the GitHub MCP tools were used to inspect repository commit details. The task-store data-loss fix is recorded in commit `f66ef9c`. These were read-only development-time tool interactions; the web application itself does not connect to Jira, GitHub, or MCP services.
 
-No MCP setup instructions are documented here because the project's MCP configuration could not be verified from the available project files.
+The MCP tools were configured in the development environment; their configuration is separate from this web application's source files.
 
 The current application stores tasks in one browser and does not use a shared database or user authentication.
 
@@ -82,7 +82,7 @@ The current application stores tasks in one browser and does not use a shared da
 - Add browser end-to-end tests for the application's user interface.
 - Add a shared database so tasks can be accessed across browsers or devices.
 - Add user authentication and account-specific task storage.
-- Implement runtime Jira and GitHub integrations in the web application.
+- Optionally add runtime Jira and GitHub integrations to the web application.
 
 ## Development Notes
 The application and helper tests should be reviewed and tested before submission. Generated code should be checked for correctness, security, and maintainability.
