@@ -29,55 +29,24 @@ const todoCount = document.getElementById("todo-count");
 const progressCount = document.getElementById("progress-count");
 const doneCount = document.getElementById("done-count");
 
-let tasks = loadTasks();
-
-function loadTasks() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-
-    if (!saved) {
-      return [];
-    }
-
-    const parsed = JSON.parse(saved);
-
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-
-    return parsed.filter((task) => {
-      return (
-        task &&
-        typeof task.id === "string" &&
-        typeof task.title === "string" &&
-        ["todo", "progress", "done"].includes(task.status) &&
-        ["low", "medium", "high"].includes(task.priority)
-      );
-    });
-  } catch (error) {
-    console.error("Could not load saved tasks:", error);
-    return [];
+const browserStorage = {
+  getItem(key) {
+    return localStorage.getItem(key);
+  },
+  setItem(key, value) {
+    localStorage.setItem(key, value);
   }
-}
+};
+const taskStore = TaskStore.createTaskStore(browserStorage, STORAGE_KEY, (error, operation) => {
+  console.error(`Could not ${operation} saved tasks:`, error);
 
-function saveTasks() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    return true;
-  } catch (error) {
-    console.error("Could not save tasks:", error);
+  if (operation === "load") {
+    alert("Saved tasks could not be loaded. Existing data is protected; refresh the page to try again.");
+  } else if (operation === "save") {
     alert("Tasks could not be saved. Check your browser storage.");
-    return false;
   }
-}
-
-function createId() {
-  if (window.crypto && typeof window.crypto.randomUUID === "function") {
-    return window.crypto.randomUUID();
-  }
-
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
+});
+let tasks = taskStore.getTasks();
 
 function escapeHTML(value) {
   return String(value).replace(/[&<>"']/g, (character) => {
@@ -300,33 +269,23 @@ taskForm.addEventListener("submit", (event) => {
     status
   };
 
-  const previousTasks = tasks.slice();
-
+  let saved;
   if (existingId) {
-    const index = tasks.findIndex((task) => task.id === existingId);
+    saved = taskStore.update(existingId, taskData);
 
-    if (index === -1) {
+    if (!saved && !tasks.some((task) => task.id === existingId)) {
       formError.textContent = "This task could not be found. Please refresh and try again.";
       return;
     }
-
-    tasks[index] = {
-      ...tasks[index],
-      ...taskData
-    };
   } else {
-    tasks.unshift({
-      id: createId(),
-      ...taskData,
-      createdAt: new Date().toISOString()
-    });
+    saved = taskStore.create(taskData);
   }
 
-  if (!saveTasks()) {
-    tasks = previousTasks;
+  if (!saved) {
     return;
   }
 
+  tasks = taskStore.getTasks();
   closeForm();
   renderTasks();
 });
@@ -368,14 +327,11 @@ taskList.addEventListener("click", (event) => {
       return;
     }
 
-    const previousTasks = tasks.slice();
-    tasks = tasks.filter((item) => item.id !== task.id);
-
-    if (!saveTasks()) {
-      tasks = previousTasks;
+    if (!taskStore.delete(task.id)) {
       return;
     }
 
+    tasks = taskStore.getTasks();
     renderTasks();
   }
 });
@@ -394,14 +350,11 @@ clearDemoButton.addEventListener("click", () => {
     return;
   }
 
-  const previousTasks = tasks.slice();
-  tasks = [];
-
-  if (!saveTasks()) {
-    tasks = previousTasks;
+  if (!taskStore.clear()) {
     return;
   }
 
+  tasks = taskStore.getTasks();
   renderTasks();
 });
 

@@ -28,7 +28,8 @@ This project is being developed to demonstrate task management, code quality, te
 - `index.html` — Application structure.
 - `style.css` — Layout and styling.
 - `script.js` — Task management functionality.
-- `tests.js` — Helper tests for validation, counting, searching, and filtering.
+- `task-store.js` — Shared task CRUD and localStorage persistence logic, used by the app and Node tests.
+- `tests.js` — Helper tests and task-store CRUD/persistence tests.
 - `README.md` — Project documentation.
 
 ## Setup and Usage
@@ -51,7 +52,7 @@ Open a terminal in the project folder and run:
 node tests.js
 ```
 
-The current helper test suite contains 15 tests covering:
+The test suite contains 21 tests covering:
 - Task title validation
 - Task status and priority validation
 - Date validation
@@ -60,10 +61,14 @@ The current helper test suite contains 15 tests covering:
 - Description searching
 - Status filtering
 - Empty search results
+- Creating, editing, deleting, and clearing tasks through the same task store used by the app
+- Restoring persisted tasks after creating a new store instance
+- Preserving in-memory data when a localStorage write fails
+- Preventing writes after saved tasks fail to load
 
-**Current test result:** 15 tests passed.
+**Current test result:** Run `node tests.js` to see the current result.
 
-Note: These are standalone helper tests; they do not replace full end-to-end testing of the browser application.
+The task-store tests exercise the production CRUD and persistence module with an in-memory localStorage substitute. They do not simulate browser DOM events or replace full browser end-to-end testing.
 
 ## Integrations and Limitations
 The current version is a local web application. Jira, GitHub automation, and MCP server integration are not yet configured. These integrations must be set up and verified before they can be demonstrated as working features.
