@@ -5,7 +5,7 @@ Use this skill when reviewing code, identifying bugs, making small fixes, testin
 
 ## Instructions
 1. Read the relevant source files before making changes.
-2. Understand the existing behavior and identify the specific requirement.
+2. Understand the existing behavior andidentify the specific requirement .
 3. Review the code for logic errors, invalid input, unsafe user-data rendering, and error-handling problems.
 4. Reproduce or clearly describe the suspected bug before changing code.
 5. Make the smallest reasonable fix. Do not add unrelated features or rewrite working code unnecessarily.
