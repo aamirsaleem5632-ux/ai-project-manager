@@ -52,7 +52,7 @@ Open a terminal in the project folder and run:
 node tests.js
 ```
 
-The test suite contains 21 tests covering:
+The test suite contains 23 tests covering:
 - Task title validation
 - Task status and priority validation
 - Date validation
@@ -79,10 +79,10 @@ No MCP setup instructions are documented here because the project's MCP configur
 The current application stores tasks in one browser and does not use a shared database or user authentication.
 
 ## Future Improvements
-- Connect Jira tasks through an MCP server.
-- Integrate GitHub for repository and commit workflows.
-- Create a reusable custom `SKILL.md` for code review and bug fixing.
-- Add automated browser tests and improve error reporting.
+- Add browser end-to-end tests for the application's user interface.
+- Add a shared database so tasks can be accessed across browsers or devices.
+- Add user authentication and account-specific task storage.
+- Implement runtime Jira and GitHub integrations in the web application.
 
 ## Development Notes
 The application and helper tests should be reviewed and tested before submission. Generated code should be checked for correctness, security, and maintainability.
