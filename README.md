@@ -69,6 +69,7 @@ The test suite contains 23 tests covering:
 **Current local test result:** 23 tests passed.
 
 The task-store tests exercise the production CRUD and persistence module with an in-memory localStorage substitute. They do not simulate browser DOM events or replace full browser end-to-end testing.
+
 Manual browser testing completed successfully: task creation, editing, deletion, search, status filtering, and persistence after page refresh all worked. Automated browser end-to-end tests were not run.
 
 ## Integrations and Limitations
